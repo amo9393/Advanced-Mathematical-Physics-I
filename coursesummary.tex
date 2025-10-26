@@ -2,7 +2,7 @@
 
 % --- FONT + LANGUAGE ---
 \usepackage{fontspec} % for custom fonts (requires xelatex/lualatex)
-\setmainfont{Kalam} % <-- requires Kalam installed
+\setmainfont{Arial} % <-- requires Kalam installed
 
 % --- MATH PACKAGES ---
 \usepackage{amsmath,amssymb,amsthm}
@@ -13,6 +13,7 @@
 \usepackage{float}
 \usepackage{graphicx}
 \usepackage{comment}
+\usepackage{hyperref}
 % --- PAGE & STYLE ---
 \usepackage[a4paper,margin=1in]{geometry}
 \usepackage{titlesec} % custom section titles
@@ -687,8 +688,28 @@ Another interesting case are periodic and antiperiodic boundary conditions. Thes
 	\includegraphics[width=0.6\textwidth]{pbc.png} % jpg/png/pdf/eps
 \end{figure}
 
-We start with antiperiodic solutions because we can use them to build periodic solutions by doubling the interval. Recall $u(x,t) = F(x+t)+G(x-t)$. with initial conditions $F(x)+G(x) = u_{0}(x)$ and $F^{\prime}(x)-G^{\prime}(x)= u_{1}(x)$. These conditions are on $x\in[0,L]$ but we can extend them with our periodic conditions $u_{0}(x+L) = u_{0}(x)$ and $u_{1}(x+L) = u_{1}(x)$
-
+We start with antiperiodic solutions because we can use them to build periodic solutions by doubling the interval. Recall $u(x,t) = F(x+t)+G(x-t)$. with initial conditions $F(x)+G(x) = u_{0}(x)$ and $F^{\prime}(x)-G^{\prime}(x)= u_{1}(x)$. These conditions are on $x\in[0,L]$ but we can extend them with our periodic conditions $u_{0}(x+L) = u_{0}(x)$ and $u_{1}(x+L) = u_{1}(x)$. When we perform the integral of $u_{1}(x)$ it will break periodicity because it will receive some extra shift. We can fix this by defining
+$$
+\tilde{u}(x,t) = u(x,t)+ct
+$$
+We have the same initial conditions for this problem except $\tilde{u}_{1}(x) = u_{1}(x)+c$. Now we can solve
+$$
+\int_{x}^{x+L}\tilde{u}_{1}(x)dx = \int_{x}^{x+L}u_{1}(x)dx + cL = 0
+$$
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.6\textwidth]{onaring.png} % jpg/png/pdf/eps
+\end{figure}
+This case is interesting because we can use it to combine two boundary conditions. We use these the conditions
+\begin{enumerate}
+\item $u(t,x)=u(t,x+L)$
+\item $u(t,-x) = -u(t,x)$
+\end{enumerate}
+This is equivalent to Dirichlett boundary conditions on the interval $[0,L/2]$
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.6\textwidth]{equaldirichlett.png} % jpg/png/pdf/eps
+\end{figure}
 \problems{
 \begin{exercise}
 	Check that the general solution of the equation
@@ -703,32 +724,7 @@ We start with antiperiodic solutions because we can use them to build periodic s
 	u(x, y) = F(x^2 - y^2) + G(xy).
 	\]
 \end{exercise}
-\solution{
-Let us define
-$$
-\xi = x^{2}-y^{2},\quad \eta = xy
-$$
-which gives us 
-$$
-\partial_{x} = y\partial_{\eta}+2x\partial_{\xi},\quad \partial_{y} = x\partial_{\eta}-2y\partial_{\xi}
-$$
-We want our equation completely in terms of $\eta$ and $\xi$ so we must find $x(\xi,\eta)$ and $y(\xi,\eta)$.
-Let us solve the system
-\begin{itemize}
-\item $(y\partial_{\eta}+2x\partial_{\xi}) x = 1$
-\item $(y\partial_{\eta}+2x\partial_{\xi})y = 0$
-\item $(x\partial_{\eta}-2y\partial_{\xi}) y = 1$
-\item $(x\partial_{\eta}-2y\partial_{\xi}) x = 0$
-\end{itemize}
-\textcolor{red}{I don't know how to solve these.} Alternatively we can use the definitions to derive
-$$
--x^{4}+\xi x^{2}+\eta^{2} = 0, \quad y^{4}+\xi y^{2} - \eta^{2}
-$$
-to get
-$$
-x^{2} = \frac{\xi\mp\sqrt{\xi^{2}+4\eta}}{2},\quad y^{2} = \frac{-\xi\pm\sqrt{\xi^{2}+4\eta^{2}}}{2}
-$$
-}
+
 \begin{exercise}
 	Solve the wave equation:
 	\[
@@ -739,26 +735,6 @@ $$
 	f(t, x) = (\theta_H(t - 1) - \theta_H(t - 3)) \, (\theta_H(x + 1) - \theta_H(x - 1)).
 	\]
 \end{exercise}
-\solution{We are solving on $\mathbb{R}$ with two specified initial conditions and and driving function $f(t,x)$. We use the linearity of the equation to solve it in pieces. For the homogenous piece we have 
-\begin{itemize}
-\item $u^{\text{free}}_{tt} - u^{\text{free}}_{xx} = 0$
-\item $u_{0}(x) = 0$
-\item $u_{1}(0)=0$
-\end{itemize}
-We see that the free solution is trivial
-$$
-u^{\text{free}}(t,x) = \frac{1}{2}\big[u_{0}(x+t)+u_{0}(x-t)+ \int_{x-t}^{t+x}u_{1}(y)dy\big]
-=0$$
-}
-Now we solve for the driven part
-$$
-u^{\text{driven}}(t,x) = \frac{1}{2}\int_{0}^{t}dt^{\prime}\int_{x-(t-t^{\prime})}^{x+(t-t^{\prime})}f(t^{\prime},x^{\prime})dx^{\prime}
-$$
-We have four integrals of the form
-$$
-\frac{1}{2}\int_{0}^{t}\Theta_{H}(t^{\prime}-i)dt^{\prime}\int_{x-(t-t^{\prime})}^{x+(t-t^{\prime})}\Theta_{H}(x^{\prime}-j)dx^{\prime}
-$$
-\textcolor{red}{Ask for help}
 
 \begin{exercise}
 	Solve the wave equation in $\mathbb{R}^{1+1}$:
@@ -768,12 +744,6 @@ $$
 	\]
 	You may first consider the case $t > 4$, and then obtain the solution for arbitrary $t$.
 \end{exercise}
-\solution{
-The driving is constant in time, but varies across the spatial domain.
-\newline
-\textcolor{red}{Ask for help}
-
-}
 \begin{exercise}
 	Solve the wave equation $u_{tt} - u_{xx} = 0$ on $\mathbb{R}$ with the following initial conditions:
 	\[
@@ -782,14 +752,6 @@ The driving is constant in time, but varies across the spatial domain.
 	where $\theta_H(x) = 0$ for $x \le 0$ and $\theta_H(x) = 1$ for $x > 0$.  
 	Plot this solution for some values of $t$.
 \end{exercise}
-\solution{
-Now we use the free solution in terms of the initial conditions
-$$
-u^{\text{free}}(t,x) = \frac{1}{2}\big[u_{0}(x+t)+u_{0}(x-t)+ \int_{x-t}^{t+x}u_{1}(y)dy\big]
-=0$$
-}
-
-
 
 \begin{exercise}
 	Solve the equation
@@ -968,13 +930,50 @@ $$
 (\partial_{t}^{2}-\Delta)G(t,\vec{x};t^{\prime},x^{\prime}) = \delta(t-t^{\prime})\delta^{(d)}(\vec{x}-\vec{x}^{\prime})
 $$
 The Greens function has the same form in the discrete case and the continuous case.
-\textcolor{red}{End of Lecture we start to study Fourier Transforms}
-
-
-
-
-
-\newpage
+There are two ways to get the greens functions. We can just solve the equation. But another approach is to use the Fourier transform.
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.3\textwidth]{FT1.png} % jpg/png/pdf/eps
+\end{figure}
+Notice that our system has rotational symmetry. $f(x)\mapsto f(x+1)$ or in matrix notation $f(x)\mapsto Tf(x)$ where $T$ is the shift operator
+\[
+T=
+\begin{pmatrix}
+	0 & 1 & 0 & \cdots & 0 \\
+	0 & 0 & 1 & \cdots & 0 \\
+	\vdots & \ddots & \ddots & \ddots & \vdots \\
+	0 & \cdots & 0 & 0 & 1 \\
+	1 & 0 & \cdots & 0 & 0
+\end{pmatrix}
+\]
+and the obvious inverse
+ \[
+T^{-1} =
+\begin{pmatrix}
+	0 & 0 & \cdots & 0 & 1 \\
+	1 & 0 & \cdots & 0 & 0 \\
+	0 & 1 & \ddots & \vdots & \vdots \\
+	\vdots & \ddots & \ddots & 0 & 0 \\
+	0 & \cdots & 0 & 1 & 0
+\end{pmatrix}
+\]
+We can use these matrices and the identity to write the earlier operator.
+$$
+\alpha - \Delta = (2+\alpha)\mathbb{I}-(T+T^{-1}
+)$$
+We need to compute the inverse matrix which is always easier in the diaganol eigenfunction basis. Let us diaganolize $T$. We need to solve the eigenvalue equation
+$$
+T\varphi_{k}(x)=\lambda_{k}\varphi_{k}(x)\Leftrightarrow \varphi_{k}(x+1) = \lambda_{k}\varphi(x)
+$$
+Because the lattice is periodic we have $T^{N} = \mathbb{I}$. So we conclude 
+$$
+\lambda_{k}^{N} = 1
+$$
+This is simply the equation for roots of unity. We deduce that the eigenfunctions are
+$$
+\varphi_{k}(x)  =\frac{1}{\sqrt{N}} e^{\frac{2\pi i kx}{N}}
+$$
+In this way we have found the beautiful result that connects the fourier basis of the discrete fourier transform to eigenvalues of the shift operator. This transform arose from other symmetries of our system. If we had a different kind of symmetry it is possible to diaganolize via a different type of transform.
 \problems{
 	\begin{exercise}
 		Solve the wave equation on a half-line $x > 0$:
@@ -1020,18 +1019,96 @@ The Greens function has the same form in the discrete case and the continuous ca
 	\end{cases}
 	\]
 \end{exercise}
-\begin{exercise}
-	Find explicitly the Green function of the operator $\Delta - m^2$ in the 5-dimensional space.
-	
-	Hint: try to use an ansatz
-	\[
-	G(r) = \frac{e^{-mr}P(mr)}{r^3}
-	\]
-	with some polynomial $P$.
-\end{exercise}
-
 }
 \lecture{6}{General Strategies Continued (Fourier Transform)}
+Now we continue our studyt of the fourier transform. For $(\alpha-\Delta)u$, the greens function is
+$$
+G(x,x^{\prime}) = (\alpha-\Delta)^{-1}(x,x^{\prime})
+$$
+Previously we found the diaganol basis
+$$
+\varphi_{k}(x)  =\frac{1}{\sqrt{N}} e^{\frac{2\pi i kx}{N}}
+$$
+Using this and the previous result $(\alpha-\Delta) = (2+\alpha)-(T+T^{-1})$ we get
+$$
+(\alpha - \Delta)\varphi_{k} = \Big[2+\alpha + -e^{\frac{2\pi i k }{N}}-e^{-\frac{2\pi i k }{N}}\Big]\varphi_{k}
+$$
+We can expand 
+$$
+f(x)=\frac{1}{\sqrt{N}}\sum_{k=1}^{N}e^{\frac{2\pi i kx}{N}}\tilde{f}(k)
+$$
+The transform goes maps between two periodic lattices $\mathbb{Z}/N\mathbb{Z}\leftrightarrow \mathbb{Z}/N\mathbb{Z}$
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.5\textwidth]{FT2.png} % jpg/png/pdf/eps
+\end{figure}
+We will later study transforms between $\mathbb{Z}\leftrightarrow S^{1}$ and $\mathbb{R}\leftrightarrow\mathbb{R}$. We can derive the inverse transform from the orthogonality condition
+$$
+\tilde{f}(k)=\frac{1}{\sqrt{N}}\sum_{x=1}^{N}f(x)e^{-\frac{2 \pi i k x}{N}}
+$$
+It is easy to compute the sum when $k=k^{\prime}$.
+For \(k \neq k'\), let \(m = k' - k \neq 0\). Then
+\[
+\sum_{x=1}^{N} e^{2\pi i (k'-k)x / N}
+= \sum_{x=1}^{N} \left(e^{2\pi i m / N}\right)^x
+= \frac{1 - \left(e^{2\pi i m / N}\right)^{N}}{1 - e^{2\pi i m / N}}.
+\]
+where we have calculated the geometric series. Since \(e^{2\pi i m} = 1\), the numerator vanishes:
+\[
+1 - \left(e^{2\pi i m / N}\right)^{N} = 1 - e^{2\pi i m} = 0.
+\]
+Hence the sum equals zero:
+we conclude that the basis functions $\{\varphi_{k}\}$ form an orthogonal set. We can understand these results through matrix representations.
+$$
+\Omega(x,y)  =
+\frac{1}{\sqrt{N}}
+\begin{pmatrix}
+	e^{\frac{2\pi i (1)(1)}{N}} & e^{\frac{2\pi i (1)(2)}{N}} & \cdots & e^{\frac{2\pi i (1)(N-1)}{N}} & 1 \\[4pt]
+	e^{\frac{2\pi i (2)(1)}{N}} & e^{\frac{2\pi i (2)(2)}{N}} & \cdots & e^{\frac{2\pi i (2)(N-1)}{N}} & 1 \\[4pt]
+	\vdots & \vdots & \ddots & \vdots & \vdots \\[4pt]
+	e^{\frac{2\pi i (N-1)(1)}{N}} & e^{\frac{2\pi i (N-1)(2)}{N}} & \cdots & e^{\frac{2\pi i (N-1)(N-1)}{N}} & 1 \\[4pt]
+	1 & 1 & \cdots & 1 & 1
+\end{pmatrix}
+$$
+It is easy to check that $\Omega(x,y)^{\dagger}\Omega(x,y) = \mathbb{I}$. We see that it is a unitary transformation which is cruical in physics. But this unitarity depends on the geometry of the underlying space.  We derive a few more properties of the discrete fourier transform
+\begin{itemize}
+\item reality: $f(x)^{*} = f(x)$
+\item $\tilde{f}(N-k)^{*} = \tilde{f}(k) \Rightarrow \tilde{f}(N)^{*} = \tilde{f}(N)$
+\item $(f,g) = (\tilde{f},\tilde{g})$
+\end{itemize}
+The second point shows us that all the point on the periodic lattice are reflected under the complex conjugation process. The third point is that the scalar produce is presereved because of the unitarity mentioned earlier. Now we can return to finding the greens function with our results.
+$$
+\Big(\frac{1}{\alpha-\Delta}f\Big)(x) = \frac{1}{\alpha-\Delta}\frac{1}{\sqrt{N}}\sum_{k=1}^{N}e^{\frac{2\pi i k x}{N}}\tilde{f}(k) =  \frac{1}{\sqrt{N}}\sum_{k=1}^{N}e^{\frac{2\pi i k x}{N}}\frac{1}{\lambda(k)}\tilde{f}(k) = 
+$$
+$$
+\frac{1}{N}\sum_{k=1}^{N}\sum_{x^{\prime}}e^{\frac{2\pi i k x}{N}}\frac{1}{\lambda(k)}e^{-\frac{2\pi i k x^{\prime}}{N}}f(x^{\prime}) = \sum_{x^{\prime}=1}^{N}G(x,x^{\prime})f(x^{\prime})
+$$
+where $G(x,x^{\prime})= G(x-x^{\prime}) = \frac{1}{N}\sum_{k=1}^{N}\frac{1}{\lambda(k)}e^{\frac{2\pi ik(x-x^{\prime})}{N}}$. So we can use this technique to help us find our green's function in discrete position space with $\lambda(k)$ being the dispersion relation for the operator, $1/\lambda(k)$ being th propogator in momentum space. This diagnolize-solve-transform back works for linear operators all over mathematical physics.
+\newline
+
+Pavlo derives the convolution when we transform the product of two functions, which is interesting, but I omit the derivation. When we take the Fourier transform of a product of two discrete periodic functions we get
+\[
+(f * g)(x)
+= \frac{1}{N} \sum_{x'=1}^{N} f(x')\, g(x - x')
+\]
+where subtraction $(x - x')$ is taken modulo $N$ to enforce periodicity. Its as if we expand each function in its own modes, then multiply all the other functions modes by all of these to get the new weights $f(x^{\prime})g(x-x^{\prime})$
+All of these properties carry over to the two other fourier transforms we can study with their continuous analogs.
+\begin{itemize}
+	\item $\mathbb{R} \leftrightarrow \mathbb{R}$
+	\[
+	\tilde{f}(k) = \frac{1}{\sqrt{2\pi}} \int_{-\infty}^{\infty} f(x)\, e^{-i k x}\, dx,
+	\qquad
+	f(x) = \frac{1}{\sqrt{2\pi}} \int_{-\infty}^{\infty} \tilde{f}(k)\, e^{i k x}\, dk.
+	\]
+	
+	\item $S^{1} \leftrightarrow \mathbb{Z}$
+	\[
+	\tilde{f}_{n} = \frac{1}{2\pi} \int_{0}^{2\pi} f(\theta)\, e^{-i n \theta}\, d\theta,
+	\qquad
+	f(\theta) = \sum_{n \in \mathbb{Z}} \tilde{f}_{n}\, e^{i n \theta}.
+	\]
+\end{itemize}
+The lecture ends explaing that the dirac delta function is the continuum limit of the kronecker delta function.
 \problems{
 \begin{exercise}
 	Study the Fourier transform on a segment $x = 1, \dots, N$:
@@ -1043,8 +1120,483 @@ The Greens function has the same form in the discrete case and the continuous ca
 		\item Write the formulas for the direct and inverse Fourier transform.
 	\end{enumerate}
 \end{exercise}
+\solution{
+	\begin{enumerate}
+		\item This is a fourier transform on a discrete line segment $[0,L]$ broken up into $N$ points. 
+We have the scalar product
+$$
+(\varphi_{k},\varphi_{k^{\prime}}) = \frac{1}{2}\sum_{x=1}^{N}\cos{\big(\frac{\pi(k-k^{\prime})x}{N+1}\big)}- \frac{1}{2}\sum_{x=1}^{N}\cos{\big(\frac{\pi(k+k^{\prime})x}{N+1}\big)}
+$$
+Let us consider when $k=k^{\prime}$. The first is just $N/2$. What is the second sum? We rewrite it as a geometric series  to get
+$$
+-\frac{1}{2}\sum_{x=1}^{N}\Re{e^{i\frac{2\pi k}{N+1}x}} = -\frac{1}{2}\sum_{x=0}^{N}\Re{e^{i\frac{2\pi k}{N+1}x}}+\frac{1}{2} = -\frac{1}{2}\Re{\frac{1-e^{i2\pi k}}{1-e^{\frac{i2\pi k}{N+1}}}}+\frac{1}{2} = 0 +\frac{1}{2}
+$$
+So for all $k = k^{\prime}$ we have
+$$
+(\varphi_{k},\varphi_{k^{\prime}}) = \frac{N+1}{2}$$
+Now let us do the series for $k\neq k^{\prime}$
+$$
+\frac{1}{2}\big[\sum_{x=0}^{N}\Re{e^{i\frac{\pi (k-k^{\prime})}{N+1}x}}- \sum_{x=0}^{N}\Re{e^{i\frac{\pi (k+k^{\prime})}{N+1}x}}\big] = \frac{1}{2}\Re{\bigg[\frac{1-e^{i\pi(k-k^{\prime})}}{1-e^{\frac{i\pi (k-k^{\prime})}{N+1}}}-\frac{1-e^{i\pi(k+k^{\prime})}}{1-e^{\frac{i\pi (k+k^{\prime})}{N+1}}}\bigg]} = 0
+$$
+If the powers are odd then we have $2-2 = 0$. If powers are even then we have $0-0 = 0$. In conclusion we have
+$$
+(\varphi_{k},\varphi_{k^{\prime}}) = \frac{N+1}{2}\delta_{k,k^{\prime}}
+$$
+\item Now we must find the fourier transform and its inverse because the functions are orthogonal on $\{1,...,N\}$ we should have
+\begin{itemize}
+\item $\tilde{f}(k) = \sqrt{\frac{2}{N+1}}\sum_{x=1}^{N}f(x)\sin{(\frac{\pi k x}{N+1})}$
+\item $f(x) = \sqrt{\frac{2}{N+1}}\sum_{k=1}^{N}\tilde{f}(k)\sin{(\frac{\pi k x}{N+1})}$
+\end{itemize}
+\end{enumerate}
+}
+
+\begin{exercise}
+	Compute the Fourier transforms of the following functions on the real line:
+	\[
+	f_3(x) = \frac{1}{\cosh x}, \qquad f_4(x) = (1 - 2x^2)e^{-x^2/2}.
+	\]
+\end{exercise}
+\solution{
+\begin{itemize}
+\item $\tilde{f}_{3}(p) = \int_{-\infty}^{\infty}\frac{e^{ipx}}{\cosh{(x)}}dx$ We have $\cosh{(x)} = \frac{e^{x}+e^{-x}}{2} = 0 \Leftrightarrow x = i\pi\frac{k}{2}+in\pi, n\in\mathbb{Z}$.
+We can find the integral by doing a contour intergal in the complex plane
+$$
+\oint \frac{e^{ipz}}{\cosh{(z)}}dz = 2\pi e^{-\frac{\pi p}{2}}
+$$
+where we used the following contour
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.65\textwidth]{contour1.png} % jpg/png/pdf/eps
+\end{figure}
+In the limit that we send $R\to\infty$ we see the $B$ is our integral of interest. We can see that
+$$
+T = \int_{R}^{-R}\frac{e^{ip(x+i\pi)}}{\cosh{(x+i\pi)}} = e^{-\pi p}\int_{-R}^{R}\frac{e^{ipx}}{\cosh{(x)}} = e^{-\pi p}B
+$$
+We can also see that $L$ and $R$ will go to zero in the limit
+$$
+\begin{aligned}
+|R| = 	\left|\int_{0}^{\pi} \frac{e^{ip(R+iy)}}{\cosh(R+iy)}\, i\,dy\right|
+	&\le \int_{0}^{\pi} \frac{|e^{ip(R+iy)}|}{|\cosh(R+iy)|}\,dy
+	\le \int_{0}^{\pi} \frac{dy}{\sinh R}
+	= \frac{\pi}{\sinh R}\xrightarrow{R\to\infty}0\\[4pt]
+|L| = 	\left|\int_{\pi}^{0} \frac{e^{ip(-R+iy)}}{\cosh(-R+iy)}\, i\,dy\right|
+	&\le \int_{0}^{\pi} \frac{|e^{ip(-R+iy)}|}{|\cosh(-R+iy)|}\,dy
+	\le \int_{0}^{\pi} \frac{dy}{\sinh R}
+	= \frac{\pi}{\sinh R}\xrightarrow{R\to\infty}0
+\end{aligned}
+$$
+We conclude that 
+$$
+\tilde{f}_{3}(p) = \frac{2\pi e^{-\frac{\pi p}{2}}}{1+e^{-\pi p}}
+$$
+\item We see that $f_{4}(x) = e^{-x^{2}/2}-2x^{2}e^{-x^{2}/2}$. So
+$$
+\tilde{f}_{4}(p) = \mathcal{F}[e^{-x^{2}/2}]-2\mathcal{F}[x^{2}e^{-x^{2}/2}] = e^{-p^2/2}+2\partial_{p}^2e^{-p^2/2} =e^{-p^2/2}(2p^2-1)$$
+\end{itemize}
+} 
+\begin{exercise}
+	Define the Fourier transform for the function on a segment $x \in [0, L]$, vanishing at the boundaries, by
+	\[
+	f(x) = \sum_{k=1}^{\infty} \tilde{f}_k \sin\frac{\pi kx}{L}.
+	\]
+	Find the inverse transformation.
+\end{exercise}
 
 
+
+}
+\lecture{7}{Properties of Fourier Transform Continued}
+We continue our study of the properties of the fourier transform. We have  transformations for 3 different scenarios.
+\begin{itemize}
+\item$\mathbb{Z}/n\mathbb{Z}\leftrightarrow\mathbb{Z}/n\mathbb{Z},\quad \tilde{f}(k)=\frac{1}{\sqrt{N}}\sum_{n=1}^{N}e^{-\frac{2\pi i nx}{N}}f(n)$
+\item $\mathbb{Z}\leftrightarrow S^{1},\quad \tilde{f}_{n} = \int_{0}^{2\pi}\frac{d\phi}{2\pi}e^{in\phi}f(\phi)$
+\item $\mathbb{R}\leftrightarrow\mathbb{R}: \tilde{f}(p)\int_{-\infty}^{+\infty}dxe^{ipx}f(x)$
+\end{itemize}
+For now we will study the transform onto the circle, the second one. We have three goals. 
+\begin{enumerate}
+\item Find behavior of $\tilde{f}_{n}$
+\item Show that the inverse transform is $f(\phi)=\sum_{n\in\mathbb{Z}}\tilde{f}_n e^{in\phi}$
+\item Study the rate of convergence
+\end{enumerate}
+Let $f(\phi)\in C^{0}(S^{1})$ be a continuous function, even piecewise continuous is fine. What does this mean for $\tilde{f}_n$. First we need to define the scalar product on the circle.
+\begin{align}
+(f,g) = \int_{-\infty}^{\infty}f^{*}(\phi)g(\phi)\frac{d\phi}{2\pi}
+\end{align}
+Now we have the following lemma.
+\begin{align}
+	\sum_{n=-\infty}^{\infty}|\tilde{f}_{n}|^{2}<\infty
+\end{align}
+That is, the series of transformed values on the lattice space converges. So we are not going to get nonsense when we transform the function. We use the scalar product to define an orthogonal projection. 
+\begin{align}
+\tilde{f}_{n} = (e^{in\phi},f)
+\end{align}
+The complex exponentials form a basis for $S^{1}$ so we are just collapsing our function onto one of a continuous set of eigenvalues. Now we approximate $f$ by only summing over $2N+1$ weights\begin{align}
+f(\phi) \approx f_{N}(\phi) = \sum_{k = -N}^{N} e^{ik\phi}\tilde{f}_{n} = \sum_{k = -N}^{N} e^{ik\phi}(e^{ik\phi},f) = (P_{N}f)(\phi)
+\end{align}
+We claim that $f_{N}(\phi) = (P_{N}f)(\phi)$ is a projector. That is $P_{N}^{2} = P_{N}$ We have
+$$
+P_{N}^{2}f = \sum_{k = -N}^{N} e^{ik\phi}(e^{ik\phi},\sum_{k^{\prime} = -N}^{N}e^{ik^{\prime}\phi}(e^{ik^{\prime}\phi},f)) = P_{N}^{2}f = \sum_{k = -N}^{N} e^{ik\phi}(\sum_{k^{\prime} = -N}^{N}\delta_{k,k^{\prime}}(e^{ik^{\prime}\phi},f)) = \sum_{k=-N}^{N}e^{ik\phi}(e^{ik\phi},f) = P_{N}f
+$$
+We also have two other properties.
+\begin{itemize}
+\item $(1-P_{N})^{2} = 1 -P_{N}$
+\item $(P_{N}f,g) = (f,P_{N}g)$ (self-adjoint)
+From properties of the inner product we have
+$$
+(f_{N}(\phi),f_{N}(\phi))\geq 0
+$$
+We expand the LHS to get
+$$
+(1-P_{N}f,(1-P_{N})f) = (f,f)-2(f,P_{N}f) +(P_{N}f,P_{N}f) = (f,f)-\sum(P_{N}f,P_{N}f) = (f,f) - \sum_{n=-N}^{N}|\tilde{f}_{n}|^{2}\geq 0
+$$
+\end{itemize}
+So we have
+$$
+\sum_{n=-N}^{N}|\tilde{f}_{n}|^{2}\leq (f,f)
+$$
+Since the partial sums
+\[
+S_{N} = \sum_{n=-N}^{N} |\tilde{f}_{n}|^{2}
+\]
+satisfy \( 0 \le S_{N} \le (f,f) \) and increase monotonically with \( N \), 
+by the Monotone Convergence Theorem the limit exists and is finite:
+\[
+\lim_{N \to \infty} S_{N} = \sum_{n=-\infty}^{\infty} |\tilde{f}_{n}|^{2} \le (f,f) < \infty.
+\]
+Hence
+\[
+\sum_{n=-\infty}^{\infty} |\tilde{f}_{n}|^{2} < \infty.
+\]All the modes or weights must go to zero otherwise the sum will not converge.
+Now let us consider the rate of convergence. If $f$ is differentiable and periodic, then
+\begin{align}
+	\widetilde{f'}_{n} 
+	&= \int_{0}^{2\pi}\frac{d\phi}{2\pi}\, e^{-in\phi}f'(\phi)
+	= \Big[\frac{e^{-in\phi}f(\phi)}{2\pi}\Big]_{0}^{2\pi}
+	+ in\int_{0}^{2\pi}\frac{d\phi}{2\pi}\, e^{-in\phi}f(\phi)
+	= in\,\tilde{f}_{n},
+\end{align}
+where the boundary term vanishes by periodicity. Hence
+\[
+\widetilde{f'}_{n} = in\,\tilde{f}_{n}.
+\]
+Applying the same reasoning repeatedly gives
+\[
+\widetilde{f^{(k)}}_{n} = (in)^{k}\tilde{f}_{n}.
+\]
+From this and the assumption that $f^{(k)} \in L^{2}(S^{1})$, it follows from Plancherel’s theorem that
+\[
+\sum_{n\in\mathbb{Z}} |\widetilde{f^{(k)}}_{n}|^{2} = 
+\sum_{n\in\mathbb{Z}} |n|^{2k} |\tilde{f}_{n}|^{2} < \infty.
+\]
+Because this weighted series converges, its individual terms must tend to zero:
+\[
+|n|^{2k} |\tilde{f}_{n}|^{2} \longrightarrow 0 
+\quad \text{as } |n| \to \infty.
+\]
+Hence there exists a constant $C > 0$ such that
+\[
+|\tilde{f}_{n}|^{2} \le \frac{C}{|n|^{2k}} 
+\quad \Rightarrow \quad 
+|\tilde{f}_{n}| \le \frac{\sqrt{C}}{|n|^{k}}.
+\]
+In big--O notation, we write this as
+\[
+|\tilde{f}_{n}| = O(|n|^{-k}) \qquad (|n| \to \infty)
+\]
+
+In words, the smoother the function $f$, the faster its Fourier coefficients decay.  
+\begin{itemize}
+	\item If $f$ is merely continuous, then $\tilde{f}_{n} \to 0$ (no specific rate).  
+	\item If $f \in C^{1}$, then $\tilde{f}_{n} = O(1/n)$.  
+	\item If $f \in C^{\infty}$, then $\tilde{f}_{n}$ decays faster than any power of $1/n$.  
+	\item If $f$ is analytic, then $\tilde{f}_{n}$ decays exponentially, e.g.\ $|\tilde{f}_{n}| \sim e^{-|n|}$.  
+\end{itemize}
+So the less smooth the function is, the more fourier modes will be required to describe it well. Truncations of the modes for numerics and so on will be much better for very smooth functions. We have analagous results for the transfrom between $\mathbb{R}\leftrightarrow\mathbb{R}$. 
+\begin{align*}
+	\widetilde{f^{(k)}}(p) &= (ip)^{k}\tilde{f}(p), &
+	\frac{d^{k}\tilde{f}}{dp^{k}}(p) &= (-i)^{k}\,\widetilde{x^{k}f(x)}(p), \\[4pt]
+	x f(x) &\leftrightarrow i\,\frac{d\tilde{f}}{dp}, &
+	f'(x) &\leftrightarrow (ip)\tilde{f}(p), \\[4pt]
+	f^{(k)}\in L^{1}(\mathbb{R}) &\Rightarrow |\tilde{f}(p)|=O(|p|^{-k}), &
+	f^{(k)}\in L^{2}(\mathbb{R}) &\Rightarrow \int |p|^{2k}|\tilde{f}(p)|^{2}dp<\infty, \\[4pt]
+	f\text{ continuous} &\Rightarrow \tilde{f}(p)\text{ bounded, cont.}, &
+	f\in C^{1} &\Rightarrow \tilde{f}(p)=O(1/p), \\[4pt]
+	f\in C^{\infty} &\Rightarrow \tilde{f}(p)\text{ decays faster than any power}, &
+	f\text{ analytic} &\Rightarrow \tilde{f}(p)\sim e^{-|p|}.
+\end{align*}
+Now consider the following example on $\mathbb{R}\leftrightarrow\mathbb{R}$.  We would like to transform
+$$
+\tilde{f}(p) = \frac{1}{p+i\gamma}
+$$
+back to position space. We will use the residue theorem, which Pavlo derives. But I skip the derivation. The transform is given by
+$$
+f(x) = \frac{1}{2\pi}\int_{-\infty}^{\infty}\frac{e^{ipx}}{p+i\gamma}dp
+$$
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.45\textwidth]{contour4.png} % jpg/png/pdf/eps
+\end{figure}
+We will complexify momentum and use the residue theorem to calculate the integral.
+$$
+\lim_{R\to\infty}\frac{1}{2\pi}\oint \frac{e^{izx}}{z+i\gamma}dz = \frac{1}{2\pi}\lim_{R\to\infty}\big[\int_{-R}^{R}\frac{e^{ipx}}{p+i\gamma}dp + \int_{C}\frac{e^{izx}}{z+i\gamma}\big]
+$$
+The first integral is the target integral we wish to find. substituting $z = Re^{i\theta}$ in the second integral we have
+$$
+\int_{C}\frac{e^{izx}}{z+i\gamma} = \int_{0}^{\pi}\frac{iRe^{i(\theta+R\cos{\theta})}e^{-R\sin{\theta}x}}{Re^{i\theta}+i\gamma}d\theta
+$$
+We can bound the argument by 
+$$
+\Big|\frac{iRe^{i(\theta+R\cos{\theta})}e^{-Rx\sin{\theta}}}{Re^{i\theta}+i\gamma}\Big|\leq \frac{|Re^{-Rx\sin{\theta}}|}{|R|-|\gamma|}  \xrightarrow{R\to\infty} 0
+$$
+when $x>0$ and $\sin\theta > 0$ or $x<0$ and $\sin\theta < 0$. We choose our contours accordingly to get 
+\[
+f(x) =
+\begin{cases}
+	0, & x > 0, \\[6pt]
+	-i\,e^{\gamma x}, & x < 0.
+\end{cases}
+\] 
+This example illustrates the general relationships we established earlier between smoothness, differentiability, and the decay of Fourier transforms.
+
+\begin{itemize}
+	\item The position--space function
+	\[
+	f(x) =
+	\begin{cases}
+		0, & x > 0, \\[4pt]
+		-i\,e^{\gamma x}, & x < 0,
+	\end{cases} = -i\Theta(-x)e^{\gamma x}
+	\]
+	is continuous but not differentiable at $x=0$. 
+	Hence, by the earlier results, we should not expect $\tilde{f}(p)$ to decay faster than $O(1/p)$, 
+	which is consistent with
+	\[
+	\tilde{f}(p) = \frac{1}{p+i\gamma}.
+	\]
+	Indeed, $|\tilde{f}(p)| \sim 1/|p|$ for large $|p|$.
+	
+	\item The discontinuity in the derivative at $x=0$ produces only a \emph{power--law decay} in $\tilde{f}(p)$,
+	whereas a smooth or analytic $f(x)$ would yield much faster decay.
+	
+	\item The parameter $\gamma>0$ controls the exponential decay rate of $f(x)$ for $x<0$:
+	\[
+	|f(x)| = e^{\gamma x} = e^{-|x|/\xi},
+	\qquad \text{with decay length } \xi = \frac{1}{\gamma}.
+	\]
+	Increasing $\gamma$ makes $f(x)$ more localized in $x$, 
+	and correspondingly $\tilde{f}(p)$ becomes broader in momentum space.
+	This again reflects the uncertainty--like tradeoff between localization and spectral spread.
+	
+	\item Thus this simple example encapsulates two of the general properties discussed earlier:
+	\begin{enumerate}
+		\item Less smoothness in $x$ $\Rightarrow$ slower decay of $\tilde{f}(p)$,
+		\item Faster spatial decay (larger $\gamma$) $\Rightarrow$ broader Fourier distribution.
+	\end{enumerate}
+\end{itemize}
+\problems{
+\begin{exercise}
+	Find the Fourier transform of the function
+	\[
+	f(x) = \frac{1}{x^2 + 1}
+	\]
+	on $\mathbb{R}$.
+\end{exercise}
+\solution{
+We have
+$$
+\tilde{f}(p) = \int_{-\infty}^{\infty} \frac{e^{ipx}}{x^{2}+1}dx
+$$
+which has two poles in the complex plane. So we complexify to get
+$$
+\oint \frac{e^{ipz}}{z^{2}+1} = \oint\frac{e^{ipx}e^{-py}}{z^{2}+1}
+$$
+with $z=x+iy$. We use the following contour
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.65\textwidth]{contour2.png} % jpg/png/pdf/eps
+\end{figure}
+}
+For $p>0$ we must use the upper contour where $y>0$. For $p<0$ we must use the lower contour where $y<0$. Using spherical coordinates $z = Re^{i\theta}$ we have the integral over the upper arc is
+$$
+\int_{0}^{\pi}\frac{e^{ipRe^{i\theta}}}{R^{2}e^{i2\theta}+1}iRe^{i\theta}d\theta
+$$
+One can show that the absolute value of the integrand is bounded by
+$$
+|\frac{Re^{-pR}}{R^{2}-1}|\xrightarrow{R\to\infty} 0
+$$
+So this integral vanishes. We calculate the residue to be $\pi e^{-p}$ for $p>0$. A similar argument goes for the lower contour and we find that the lower contour integral for $p<0$ gives the residue $\pi e^{p}$. Our final transformed function is 
+$$
+\tilde{f}(p) = \pi e^{-|p|}
+$$
+\begin{exercise}
+	Find the Fourier transform of the function
+	\[
+	f(x) = \frac{\sin x}{x^2 + 1}
+	\]
+	on $\mathbb{R}$.
+\end{exercise}
+\solution{
+We would like to find
+$$
+\int_{-\infty}^{\infty}\frac{\sin(x)e^{ipx}}{x^{2}+1}dx
+$$
+We have the same poles as in teh previous problem so we use the same contour. Using the exponential definiton of $\sin{(x)}$ we get
+$$
+\tilde{f}(p)=\frac{1}{2i}\big[\int_{-\infty}^{\infty}\frac{e^{i(p+1)}}{x^{2}+1}-\int_{-\infty}^{\infty}\frac{e^{i(p-1)}}{x^{2}+1}\big]
+$$
+But this if we complexify this is exactly the same contour integral as the previous question but with $p\to\pm1$. Using the previous result we get
+$$
+\tilde{f}(p) = \frac{i\pi}{2}\big[e^{-|p-1|}-e^{-|p+1|}\big]
+$$
+}
+\begin{exercise}
+	Find the Fourier transform of the function
+	\[
+	f(x) = \frac{\sin x}{x}
+	\]
+	on $\mathbb{R}$.
+\end{exercise}
+}
+\solution{
+Using the exponetial definition of the sine function we have
+$$
+\tilde{f}(p)\frac{1}{2i}\big[\int_{-\infty}^{\infty}\frac{e^{i(p+1)x}}{x}-[\int_{-\infty}^{\infty}\frac{e^{i(p-1)x}}{x}\big]
+$$
+When we complexify these integrals we will have two choices of contour.
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.65\textwidth]{contour3.png} % jpg/png/pdf/eps
+\end{figure}
+
+In both cases 
+$$
+\lim_{R\to\infty}\lim_{\epsilon\to0}\oint \frac{\sin{(z)e^{ipz}}}{z}dz = 0
+$$
+For $p+1>0$ we use the upper contour for the first integral and for $p+1<0$ we use the lower contour. For $p-1>0$ we use the upper arc for the second integral and for $p-1<0$ we use the lower contour. In this way taking the limit of $R\to\infty$ will cause the large arc to vanish. Since the entire contour is $0$ that means our targe integral is the negative of the arc of radius $\epsilon$ around the pole. Setting up the integral on the small arc and taking $\epsilon\to 0$ gives trivial integrals. 
+We find that we have
+\[
+\tilde{f}(p) =
+\begin{cases}
+	\dfrac{\pi}{2}, & p > -1, \\[6pt]
+	-\dfrac{\pi}{2}, & p \le -1
+\end{cases}
+\quad - \quad
+\begin{cases}
+	\dfrac{\pi}{2}, & p > 1, \\[6pt]
+	-\dfrac{\pi}{2}, & p \le 1
+\end{cases}
+\]
+This is just a rectangle of height $\pi$ from $x=-1$ to $x = 1$ and $0$ everywhere else.
+}
+\lecture{8}{Finishing Fourier Transform on a Circle and Intro to Generalized Functions}
+We continue studying properties of Fourier transforms. In the last lecture we ended with the result
+$$
+\frac{1}{p+i\gamma},\ \gamma >0 \leftrightarrow - i\Theta_{H}(-x)e^{\gamma x}
+$$
+We arrived at this result via the contour integral. The rate of decay depends on the singularity in momentum space. Using the fact that
+$$
+\frac{1}{p-i\gamma},\ \gamma>0 \leftrightarrow i\Theta_{H}(x)e^{-\gamma x}
+$$
+We can piece these results together to get
+$$
+\frac{1}{p+i\gamma} - \frac{1}{p-i\gamma},\ \gamma>0 \leftrightarrow -ie^{-\gamma |x|}
+$$
+Condensing the lefthand side gives us
+$$
+-\frac{2i\gamma}{p^{2}+\gamma^{2}}
+$$
+Using the fourier transform we get the following integral identity
+$$
+\int_{-\infty}^{\infty}\frac{2}{\pi}\frac{\gamma e^{ipx}}{p^{2}+\gamma^{2}} dp= e^{-\gamma|x|}
+$$
+At $x=0$ we get
+$$
+\int_{-\infty}^{\infty}\frac{2}{\pi}\frac{\gamma}{p^{2}+\gamma^{2}} = 1
+$$
+We can use this in our computations. Now we turn to finding the inverse fourier transform on $S^{1}$. Previously we had
+$$
+\tilde{f}_{n} = \int_{0}^{2\pi}\frac{d\phi}{2\pi}e^{-in\phi}f(\phi)
+$$
+We proved with a lemma that 
+$$
+f(\phi)=\sum_{n\in\mathbb{Z}}\tilde{f}_{n}e^{in\phi}
+$$
+We omit the detailed proof of convergence, but now we can use this inverse transform. Another important feature of a fourier series of a discontinuous function is that it
+does not converge pointwise at the jump: it exhibits oscillations known as the Gibbs Phenomenon. 
+These oscillations arise from the sinc--like kernel $\sin x/x$ that governs Fourier reconstruction. 
+The integral
+\[
+I = \int_{-\infty}^{\infty}\frac{\sin x}{x}\,dx = \pi
+\]
+illustrates the normalization of the sinc kernel and shows how Fourier approximations 
+reproduce the correct average value across a discontinuity, even though they fail to converge 
+pointwise. The sinc function effectively approximates the Dirac delta, and the Gibbs phenomenon 
+expresses the limitation of representing discontinuous functions with smooth Fourier modes. 
+This naturally motivates the theory of \textit{generalized functions}, which extends the notion of 
+a function so that differentiation and Fourier transformation remain well defined even for 
+discontinuous or non--integrable cases. Within this framework the Dirac delta $\delta(x)$ and its 
+derivatives are rigorously defined, identities such as $\frac{d\Theta_{H}}{dx}=\delta(x)$ hold, and 
+Fourier transforms of singular objects like $1$ or $1/(p+i\epsilon)$ acquire precise meaning. 
+Distributions thus provide a consistent language for handling discontinuities, singularities, and 
+limiting prescriptions that frequently arise in physics.
+Here are some common results.
+\begin{align*}
+	\delta(ax) &= \frac{1}{|a|}\,\delta(x), &
+	x\,\delta(x) &= 0, &
+	\int_{-\infty}^{\infty}\delta(x)\,dx &= 1, \\[4pt]
+	\frac{d\Theta_{H}}{dx} &= \delta(x), &
+	\frac{d\,\operatorname{sgn}(x)}{dx} &= 2\delta(x), &
+	\frac{d\,\delta(x)}{dx} &= -\delta'(x), \\[4pt]
+	\mathcal{F}\{\delta(x)\} &= 1, &
+	\mathcal{F}\{1\} &= 2\pi\delta(p), &
+	\mathcal{F}\{\Theta_{H}(x)\} &= \pi\delta(p) + \frac{i}{p}, \\[4pt]
+	\mathcal{F}\{\operatorname{sgn}(x)\} &= \frac{2}{ip}, &
+	\mathcal{F}\{x f(x)\} &= i\,\frac{d\tilde{f}}{dp}, &
+	\mathcal{F}\{f'(x)\} &= (ip)\tilde{f}(p).
+\end{align*}
+
+
+\problems{
+\begin{exercise}
+	Find the Fourier transform of the function
+	\[
+	f(x) = \frac{1}{e^{2\pi i x} - \frac{1}{2}}
+	\]
+	on a circle $x \sim x + 1$.
+\end{exercise}
+\solution{
+When we transform functions on a circle we go between $\mathbb{Z}\leftrightarrow S^{1}$. The weights are given by
+$$
+\tilde{f}_{n}= \int_{0}^{1}\frac{dx}{2\pi}e^{-2\pi inx}\frac{1}{e^{2\pi i x}-\frac{1}{2}}
+$$
+If we substitute $z=e^{2\pi ix}$ we get the following contour integral
+$$
+\frac{1}{2\pi i}\oint_{|z|=1}\frac{z^{-n-1}}{z-\frac{1}{2}}
+$$
+We see there is a pole inside the contour at $z=\frac{1}{2}$. Calculating the residue gives us the weights 
+$$
+\tilde{f}_{n} = 2^{n+1}$$
+\textcolor{red}{not defined for all n}
+}
+\begin{exercise}
+	Find the Fourier transform of the function
+	\[
+	f(x) = \frac{1}{\cos(2\pi x) - \cosh(2\pi a)}
+	\]
+	on a circle $x \sim x + 1$.
+\end{exercise}
+\solution{
+We would like to find
+$$
+\tilde{f}_{n}= \int_{0}^{1}\frac{-2e^{2\pi i nx}}{e^{i2\pi x}+e^{-i2\pi x}-2\cosh{(2\pi a)}}dx = \frac{1}{\pi i}\oint_{|z|=1}\frac{z^{-n}}{z^{2}-(e^{-2\pi a}+ e^{2\pi a})z+1}dz
+$$
+where we used the exponential definitions of $\cos$ and $\cosh$, compexified and substituted $z= e^{i2\pi x}$. We see the denominator factors into $(z-e^{2\pi a})(z-e^{-2\pi a})$. We are assuming $a\in \mathbb{R}$ and $a>0$ so $z = e^{2\pi a}$ is outside the contour.
+Calculating the residue and simplifying gives us 
+$$
+\tilde{f}_{n} = \frac{e^{-2\pi a n}}{\sinh{(2\pi a)}}
+$$
+\textcolor{red}{not defined for all n}
+}
 \begin{exercise}
 	Compute the Fourier transforms of the following functions on a circle $\varphi \in [0, 2\pi)$:
 	\[
@@ -1053,63 +1605,91 @@ The Greens function has the same form in the discrete case and the continuous ca
 	For $f_1$, determine the asymptotic behavior of the coefficients at large $n$.  
 	For $f_2$, compute $f_2(0)$ and compare it with its Fourier series at this point. Does it yield any non-trivial identity?
 \end{exercise}
-
 \begin{exercise}
-	Compute the Fourier transforms of the following functions on the real line:
-	\[
-	f_3(x) = \frac{1}{\cosh x}, \qquad f_4(x) = (1 - 2x^2)e^{-x^2/2}.
-	\]
+	Compute the Fourier transform of $\operatorname{v.p.}\frac{1}{\omega}$, then check that the inverse Fourier transform recovers the initial (generalized) function.
 \end{exercise}
-
-\begin{exercise}
-	Define the Fourier transform for the function on a segment $x \in [0, L]$, vanishing at the boundaries, by
-	\[
-	f(x) = \sum_{k=1}^{\infty} \tilde{f}_k \sin\frac{\pi kx}{L}.
-	\]
-	Find the inverse transformation.
-\end{exercise}
-\begin{exercise}
-	Find the Fourier transform of the function
-	\[
-	f(x) = \frac{1}{e^{2\pi i x} - \frac{1}{2}}
-	\]
-	on a circle $x \sim x + 1$.
-\end{exercise}
-
-\begin{exercise}
-	Find the Fourier transform of the function
-	\[
-	f(x) = \frac{1}{\cos(2\pi x) - \cosh(2\pi a)}
-	\]
-	on a circle $x \sim x + 1$.
-\end{exercise}
-
-\begin{exercise}
-	Find the Fourier transform of the function
-	\[
-	f(x) = \frac{1}{x^2 + 1}
-	\]
-	on $\mathbb{R}$.
-\end{exercise}
-
-\begin{exercise}
-	Find the Fourier transform of the function
-	\[
-	f(x) = \frac{\sin x}{x^2 + 1}
-	\]
-	on $\mathbb{R}$.
-\end{exercise}
-
-\begin{exercise}
-	Find the Fourier transform of the function
-	\[
-	f(x) = \frac{\sin x}{x}
-	\]
-	on $\mathbb{R}$.
-\end{exercise}
-
+\lecture{9}{Generalized Functions and ...}
 }
+Now we return to our transforms $f(x)\leftrightarrow\tilde{f}(p)$ and consider \textit{generalized functions}. 
+These are continuous linear functionals acting on the space of smooth test functions 
+$C^{\infty}(\mathbb{R})$, or more generally on $C^{\infty}(\mathbb{R}/S^{1}/\mathbb{R}^{n},\mathbb{C})$. 
+A sequence of ordinary functions $\{f_{n}\}$ is said to converge \emph{weakly} to a generalized function $f$ 
+if for every test function $\varphi$ we have
+\[
+f_{n} \to f_{\text{gen}} 
+\quad \text{iff} \quad 
+(f_{n},\varphi) \;\longrightarrow\; (f,\varphi),
+\qquad 
+\forall\,\varphi \in C^{\infty}(\mathbb{R}/S^{1}/\mathbb{R}^{n}...).
+\]
+Here $(f,\varphi)$ denotes the pairing or dual action, typically written as
+\[
+(f,\varphi) = \int f(x)\,\varphi(x)\,dx,
+\]
+whenever the integral exists.  
+This defines convergence in the weak or distributional sense, 
+and allows us to treat limits of oscillatory or singular sequences—such as those arising in Fourier analysis—
+as well-defined generalized functions.
+A family of ordinary functions $\{\delta_{\epsilon}(x)\}_{\epsilon>0}$ is called a 
+\textit{delta sequence} if
+\[
+\lim_{\epsilon\to 0^{+}} \int_{-\infty}^{\infty} \delta_{\epsilon}(x)\,\varphi(x)\,dx 
+= \varphi(0),
+\qquad \forall\,\varphi\in C^{\infty}_{c}(\mathbb{R}).
+\]
+That is, $\delta_{\epsilon}\to\delta$ in the weak (distributional) sense.  
+Typical examples include
+\[
+\delta_{\epsilon}(x)
+= \frac{1}{\sqrt{\pi}\epsilon}e^{-(x/\epsilon)^{2}}, 
+\qquad
+\delta_{\epsilon}(x)
+= \frac{1}{\pi}\frac{\epsilon}{x^{2}+\epsilon^{2}}, 
+\qquad
+\delta_{\epsilon}(x)
+= \frac{\sin(x/\epsilon)}{\pi x}.
+\]
+Each of these satisfies the normalization condition
+\[
+\int_{-\infty}^{\infty}\delta_{\epsilon}(x)\,dx = 1,
+\]
+and becomes increasingly localized around $x=0$ as $\epsilon\to 0$. Let us return to the solution of the wave equation we found on $\mathbb{R}$, wo se can see an example of these generalized functions. For the equation $u_{xx}-u_{tt} = 0$ we had the solution  $u(x,t) = \frac{1}{2}(u_{0}(x-t)+u_{0}(x+t))$
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.45\textwidth]{wave1.png} % jpg/png/pdf/eps
+\end{figure}
+Now let us consider the derivatives. The first derivative is given by
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.45\textwidth]{derivatives.png} % jpg/png/pdf/eps
+\end{figure}
+We see that the colloquial  second derivative does not exists due to the discontinuities. But we still have an integrable function with $u_{xx}(0,x) = \delta(x-1)-2\delta(x)-\delta(x+1)$. To make this rigorous we must introduce the weak form of an equation. For our equation we $u_{xx}-u{tt} = f$ we have
+$$
+(u_{xx}-u_{tt},\varphi)\to(f,\varphi)
+$$
+From this we have
+$$
+0 = 
+$$
+\begin{center}
+\textcolor{red}{@30 minutes in lecture video}
+\end{center}
 
+
+
+
+
+
+\newpage
+\lecture{10}{Applications of Fourier Transform To Solving PDEs}
+\begin{center}
+\textcolor{red}{extremely useful, review lecture video}
+\end{center}
+
+
+
+
+\newpage
 \lecture{X}{More Problems}
 \problems{
 
@@ -1134,9 +1714,7 @@ The Greens function has the same form in the discrete case and the continuous ca
 \end{exercise}
 
 
-\begin{exercise}
-	Compute the Fourier transform of $\operatorname{v.p.}\frac{1}{\omega}$, then check that the inverse Fourier transform recovers the initial (generalized) function.
-\end{exercise}
+
 
 \begin{exercise}
 	Solve the following equation:
@@ -1359,4 +1937,157 @@ The Greens function has the same form in the discrete case and the continuous ca
 	u_t - u_{xx} = 0, \qquad u(0, x) = e^{-(x - a)^2}.
 	\]
 \end{exercise}
+\begin{exercise}
+	Find explicitly the Green function of the operator $\Delta - m^2$ in the 5-dimensional space.
+	
+	Hint: try to use an ansatz
+	\[
+	G(r) = \frac{e^{-mr}P(mr)}{r^3}
+	\]
+	with some polynomial $P$.
+\end{exercise}
+\begin{exercise}
+	Find the normal form of the equation
+	\[
+	u_{xx}+2 u_{xy}+u_{yy}+u_x+u=0.
+	\]
+\end{exercise}
+
+\begin{exercise}
+	Find the normal form of the equation
+	\[
+	u_{xx}+2u_{xy}+u_{yy}-u_{zz}=0.
+	\]
+	Write its general solution.
+\end{exercise}
+
+\begin{exercise}
+	Check that the general solution of the equation
+	\[
+	\partial_x \left(\frac{x y}{x^2+y^2}\partial_x u\right)
+	+\frac12 \partial_x \left(\frac{x^2-y^2}{x^2+y^2}\partial_y u\right)
+	+\frac12 \partial_y \left(\frac{x^2-y^2}{x^2+y^2}\partial_x u\right)
+	- \partial_y\left(\frac{x y}{x^2+y^2}\partial_y u\right)=0
+	\]
+	is given by
+	\[
+	u(x,y)=F(x^2-y^2)+G(x y).
+	\]
+\end{exercise}
+
+\begin{exercise}
+	Solve the wave equation on the half-line \(x>0\):
+	\[
+	u_{tt}-u_{xx}=\theta_H(1-x), \quad u(0,x)=0, \quad u_t(0,x)=0, \quad u(t,0)=0,
+	\]
+	where \(\theta_H\) is the Heaviside theta function:
+	\[
+	\theta_H(x)=
+	\begin{cases}
+		0, & x<0,\\
+		1, & x>0,\\
+		\frac12, & x=0.
+	\end{cases}
+	\]
+	For simplicity, you may consider its solution only for \(t>4\).
+\end{exercise}
+
+\begin{exercise}
+	Solve the wave equation on the half-line \(x>0\):
+	\[
+	u_{tt}-u_{xx}=0, \quad u(0,x)=0, \quad u_t(0,x)=\theta_H(x-3)-\theta_H(x-2), \quad u(t,0)=0.
+	\]
+	For simplicity, you may again consider only the large time case.
+\end{exercise}
+
+\begin{exercise}
+	Solve the wave equation on the half-line:
+	\[
+	u_{tt}-u_{xx}=0, \quad u(0,x)=0, \quad u_t(0,x)=0, \quad u(t,0)=\sin t.
+	\]
+\end{exercise}
+
+\begin{exercise}
+	Compute the Fourier transform of the function \(f\) on \(\mathbb{Z}/(2N)\mathbb{Z}\) defined by
+	\[
+	f(0)=0, \quad f(1)=\ldots =f(N-1)=1, \quad f(N)=0, \quad f(-1)=\ldots =f(1-N)=-1.
+	\]
+\end{exercise}
+
+\begin{exercise}
+	Compute the Fourier transform of the function \(f(\phi)\) on \(S^1\) defined by
+	\[
+	f(\phi)=
+	\begin{cases}
+		-1, & \phi\in(-\pi,0),\\
+		1, & \phi\in(0,\pi).
+	\end{cases}
+	\]
+\end{exercise}
+
+\begin{exercise}
+	Compute the [inverse] Fourier transform of
+	\[
+	\tilde{f}_{\epsilon}(p)=e^{-\epsilon|p|}
+	\]
+	defined on the real line.
+\end{exercise}
+
+\begin{exercise}
+	Compute the Fourier transform of
+	\[
+	f_{\epsilon}(x)=\frac{x}{\pi(x^2+\epsilon^2)}
+	\]
+	defined on the real line.
+	Compute the integral
+	\[
+	\int_{-\infty}^{\infty}f_{\epsilon}(x)\,dx
+	\]
+\end{exercise}
+
+\begin{exercise}
+	Compute the Fourier transform of
+	\[
+	f(n)=e^{-\epsilon|n|}
+	\]
+	defined on \(\mathbb{Z}\).
+\end{exercise}
+
+\begin{exercise}
+	Compute the [inverse] Fourier transform of
+	\[
+	\tilde{f}_\epsilon(p)=e^{-\frac12\epsilon p^2}.
+	\]
+	What is the value of its integral from \(-\infty\) to \(+\infty\)?
+\end{exercise}
+
+\begin{exercise}
+	Compute the Fourier transform of the function on \(S^1\)
+	\[
+	f_{\epsilon}(\phi) = \frac{\sinh \epsilon}{\cosh \epsilon-\cos \phi}.
+	\]
+	Hint: for computing the integral \(\int_0^{2\pi} \frac{d\phi}{2\pi} f_{\epsilon}(\phi)e^{-i n \phi}\),
+	introduce the new variable \(z=e^{i \phi}\) and find an appropriate way to deform the integration contour.
+	
+	What is \(\int_0^{2\pi} f_{\epsilon}(\phi)\,d\phi\)?
+\end{exercise}
+
+\begin{exercise}
+	Solve the heat equation
+	\[
+	u_t=u_{xx}, \quad u(0,x)=e^{-a x^2}.
+	\]
+\end{exercise}
+
+\begin{exercise}
+	Compute the Fourier transform of
+	\[
+	f(x)=x e^{-x^2}
+	\]
+	and of
+	\[
+	f(x)=x^2 e^{-x^2}.
+	\]
+\end{exercise}
+
 \end{document}
