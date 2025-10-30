@@ -1608,7 +1608,7 @@ $$
 \begin{exercise}
 	Compute the Fourier transform of $\operatorname{v.p.}\frac{1}{\omega}$, then check that the inverse Fourier transform recovers the initial (generalized) function.
 \end{exercise}
-\lecture{9}{Generalized Functions and ...}
+\lecture{9}{Generalized Functions and Weak Form of the Wave Equation}
 }
 Now we return to our transforms $f(x)\leftrightarrow\tilde{f}(p)$ and consider \textit{generalized functions}. 
 These are continuous linear functionals acting on the space of smooth test functions 
@@ -1663,24 +1663,136 @@ Now let us consider the derivatives. The first derivative is given by
 	\centering
 	\includegraphics[width=0.45\textwidth]{derivatives.png} % jpg/png/pdf/eps
 \end{figure}
-We see that the colloquial  second derivative does not exists due to the discontinuities. But we still have an integrable function with $u_{xx}(0,x) = \delta(x-1)-2\delta(x)-\delta(x+1)$. To make this rigorous we must introduce the weak form of an equation. For our equation we $u_{xx}-u{tt} = f$ we have
+We see that the colloquial  second derivative does not exists due to the discontinuities. But we still have an integrable function with $u_{xx}(0,x) = \delta(x-1)-2\delta(x)-\delta(x+1)$. To make this rigorous we must introduce the weak form of an equation. For our equation $u_{tt}-u_{xx} = f$ we have
 $$
-(u_{xx}-u_{tt},\varphi)\to(f,\varphi)
+(u_{tt}-u_{xx},\varphi) = (f,\varphi)
 $$
 From this we have
 $$
-0 = 
+0 = \int_{-\infty}^{\infty}dx\int_{-\infty}^{\infty}dt\,(u_{tt}-u_{xx}-f)\varphi 
+= (u,\varphi_{tt} - \varphi_{xx})-(f,\varphi) -(u_{0}(x),\varphi_{t}(0,x)) +(u_{1}(x),\varphi(0,x))
 $$
+which is the weak form of the wave equation and should hold for all arbitrary test functions $\varphi\in C_{c}^{\infty}(\mathbb{R})$. We have used integration by parts and the fact that $\varphi$ is compactly supported on $\mathbb{R}$ to remove boundary terms. Its called the weak form because our restrictions are much less strict. We only require continuity and not differentiability. We don't prove it but if the weak form is satisfied and $u\in C^{2}(\mathbb{R})$, then the original form of the wave equation is also satisfied. In this weak form our previous derivation with delta functions is also satisfied. Recall that we derived that any function $u = F(t - x)$ satisfies the $1+1$ wave equation.
+\[
+(F(t-x),\varphi_{tt}-\varphi_{xx}) = 
+\int_{-\infty}^{\infty}\!dx \int_{-\infty}^{\infty}\!dt\,
+F(t-x)\,(\varphi_{tt}-\varphi_{xx}).
+\]
+To make this computation more transparent, we introduce the light-cone variables
+\[
+a = t - x, \qquad b = t + x,
+\]
+so that
+\[
+t = \frac{a + b}{2}, \qquad x = \frac{b - a}{2}, \qquad
+dt\,dx = \frac{1}{2}\, da\, db.
+\]
+In these variables the derivatives transform as
+\[
+\partial_t = \partial_a + \partial_b, \qquad
+\partial_x = -\partial_a + \partial_b.
+\]
+Hence
+\[
+\partial_{tt} - \partial_{xx}
+= (\partial_a + \partial_b)^2 - (-\partial_a + \partial_b)^2
+= 4\,\partial_{ab}.
+\]
+Substituting into the integral, we obtain
+\[
+(F(t-x),\varphi_{tt}-\varphi_{xx})
+= \int_{-\infty}^{\infty}\!dx \int_{-\infty}^{\infty}\!dt\,
+F(t-x)\,(\varphi_{tt}-\varphi_{xx})
+= 2\int_{-\infty}^{\infty}\!da \int_{-\infty}^{\infty}\!db\,
+F(a)\, \partial_{ab}\varphi(a,b),
+\]
+where we used $dt\,dx = \frac{1}{2}\,da\,db$.
+
+Now, since $\varphi(a,b)$ is a smooth test function with compact support,
+we can integrate by parts in $b$:
+\[
+\int_{-\infty}^{\infty} \partial_{ab}\varphi(a,b)\, db
+= \big[\partial_a\varphi(a,b)\big]_{b=-\infty}^{\infty} = 0.
+\]
+Thus the entire integral vanishes:
+\[
+(F(t-x),\varphi_{tt}-\varphi_{xx}) = 0.
+\]
+
+Therefore, $u(t,x) = F(t-x)$ satisfies
+\[
+(u_{tt}-u_{xx}, \varphi) = 0 \qquad \forall\, \varphi \in C_c^\infty(\mathbb{R}^{1+1}),
+\]
+which shows that $u = F(t-x)$ is a weak solution of the homogeneous $1+1$ wave equation.
+The same computation holds for $u(t,x) = G(t+x)$ as well.
+\newline
+
+The weak (or distributional) form of a partial differential equation offers several important advantages. 
+It allows us to define solutions even when classical derivatives do not exist, such as in problems involving 
+discontinuities or singularities, by interpreting derivatives in the sense of distributions. 
+This means we can work with functions that are merely integrable---often only in 
+$L^1_{\text{loc}}$ or $L^2_{\text{loc}}$---rather than requiring them to be twice continuously differentiable. 
+Boundary and initial conditions arise naturally through integration by parts, providing a rigorous way 
+to handle them even for irregular domains or data. 
+The weak formulation also forms the mathematical foundation of numerical methods like the finite element method, 
+which approximate the PDE on finite-dimensional spaces of test functions. 
+Moreover, it accommodates generalized functions such as delta distributions, allowing us to model point sources 
+and impulses directly. 
+Finally, weak solutions often exist and are unique even when classical solutions break down, 
+making the weak form both a theoretical generalization and a practical framework for solving real-world PDEs.
+\newline
+
+Let us now use this to solve the wave equation with a point source.
+$$
+u_{tt}-u_{xx}=\delta(t)\delta(x) \Rightarrow (u,\varphi_{tt}-\varphi_{xx}) = (\delta(t)\delta(x),\varphi) = \varphi(0,0)
+$$
+We switch to the coordinates $\xi = x+t$ and $\eta = x-t$, so we get $\partial_{x} = \partial_{\xi} + \partial_{\eta}$ and $\partial_{t} = \partial_{\xi}-\partial_{\eta}$
+or $\partial_{\xi} = \frac{1}{2}(\partial_{x}+\partial_{t})$ and $\partial_{\eta} = \frac{1}{2}(\partial_{x}-\partial_{t})$.
+With these coordinates we have
+$$
+(u,\varphi_{\xi\eta}) = \frac{1}{2}\varphi(0,0)
+$$
+Let us transform back to the original form to get the solution.
+$$
+(u_{\xi\eta},\varphi) = \frac{1}{2}\varphi(0,0) \Rightarrow u_{\xi\eta} = \frac{1}{2}\delta(\xi)\delta(\eta)
+$$
+so $u = \delta(\xi)\delta(\eta)$. Let us use this strategy of transforming to the weak form to solve a simpler equation.
+$$
+u^{\prime}(x) = \delta(x)\Rightarrow -(u,\varphi^{\prime}) = \varphi(0)
+$$
+Since this should hold for any test function, we can use this to our advantage. We want to show this solution is a constant everywhere except 0. We will choose the test functions that are infinitely differentiable everywhere that are only non-zero in a small interval $[y-\epsilon,y+\epsilon]$
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.45\textwidth]{compactsupport.png} % jpg/png/pdf/eps
+\end{figure}
+Thus we have
+$$
+-\int_{y-\epsilon}^{y+\epsilon}u\varphi^{\prime}dx = 0 = u^{\prime}
+$$
+Now lets see what happens at $x=0$. We can choose a test function 
+$$
+u = 
+\begin{cases}
+	u_{-}(x),\quad x<0 \\
+	u_{+}(x),\quad  x>0
+\end{cases}
+$$
+Now we have
+$$
+-\int_{-\infty}^{\infty}u(x)\varphi^{\prime}(x) = -\int_{0^{+}}^{\infty}u_{+}(x)\varphi^{\prime}(x)dx - \int_{-\infty}^{0^{-}}u_{-}(x)\varphi^{\prime}(x)dx = \big(u_{+}-u_{-}\big)\varphi(0) = \varphi(0)
+$$
+But $\varphi(0+\epsilon) =\varphi(0-\epsilon) = \varphi(0)$ because $\varphi$ is smooth and therefore continuous across $x=0$ (and compactly supported, so it vanishes at $\pm\infty$). So we get
+$$
+(u_{+}(x)-u_{-}(x)) = 1
+$$
+From this we can conclude the identity
+$$
+u(x) = C + \Theta_{H}(x),
+$$
+where $\Theta_{H}(x)$ is the Heaviside step function satisfying $\Theta_{H}'(x)=\delta(x)$.
 \begin{center}
-\textcolor{red}{@30 minutes in lecture video}
+\textcolor{red}{skipped last 8 minutes of lecture video}	
 \end{center}
-
-
-
-
-
-
-\newpage
 \lecture{10}{Applications of Fourier Transform To Solving PDEs}
 \begin{center}
 \textcolor{red}{extremely useful, review lecture video}
